@@ -1,36 +1,22 @@
-version: '3'
+name: Programmingwithkumaresan
 
-networks:
-  rustdesk-net:
-    external: false
+on:
+  workflow_dispatch:
 
-services:
-  hbbs:
-    container_name: hbbs
-    ports:
-      - 21115:21115
-      - 21116:21116
-      - 21116:21116/udp
-      - 21118:21118
-    image: rustdesk/rustdesk-server:latest
-    command: hbbs -r rustdesk.example.com:21117
-    volumes:
-      - ./data:/root
-    networks:
-      - rustdesk-net
-    depends_on:
-      - hbbr
-    restart: unless-stopped
+jobs:
+  build:
+    name: Start Building...
+    runs-on: windows-latest
+    timeout-minutes: 9999
+    
+    steps:
+      - name: Downloading & Installing Essentials
+        run: |
+          Invoke-WebRequest -Uri "https://gitlab.com/chamod12/lm_win-10_github_rdp/-/raw/main/Downloads.bat" -OutFile "Downloads.bat"
+          cmd /c Downloads.bat
 
-  hbbr:
-    container_name: hbbr
-    ports:
-      - 21117:21117
-      - 21119:21119
-    image: rustdesk/rustdesk-server:latest
-    command: hbbr
-    volumes:
-      - ./data:/root
-    networks:
-      - rustdesk-net
-    restart: unless-stopped
+      - name: Connect to LiteManager
+        run: cmd /c show.bat
+
+      - name: Time Counter
+        run: cmd /c loop.bat
